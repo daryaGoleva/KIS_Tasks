@@ -1,0 +1,55 @@
+<?php
+
+$inputFile = fopen('input.txt', 'r');
+$inputLine = fgets($inputFile);
+
+function fixLink($string)
+{
+$outputLine = "http";
+$outputFile = fopen('output.txt', 'w');
+
+if ($string[4] == "s") {
+$outputLine = $outputLine . "s://";
+$start = 5;
+} else {
+$outputLine = $outputLine . "://";
+$start = 4;
+}
+
+$domenPosition = "";
+
+if (strpos($string, "com")) {
+$domenPosition = strpos($string, "com");
+$domen = "com";
+$shift = 3;
+} else {
+$domenPosition = strpos($string, "ru");
+$domen = "ru";
+$shift = 2;
+}
+
+for ($i = $start; $i < $domenPosition; $i++) {
+$outputLine = $outputLine . $string[$i];
+}
+
+$outputLine = $outputLine . "." . $domen;
+
+if (strlen($string) == $domenPosition+$shift) {
+var_dump($outputLine);
+fwrite($outputFile, $outputLine);
+return;
+} else {
+$outputLine = $outputLine.'/';
+}
+
+for ($i = $domenPosition + $shift; $i < strlen($string); $i++) {
+$outputLine = $outputLine . $string[$i];
+}
+
+var_dump($outputLine);
+fwrite($outputFile, $outputLine);
+
+}
+
+fixLink($inputLine);
+?>
